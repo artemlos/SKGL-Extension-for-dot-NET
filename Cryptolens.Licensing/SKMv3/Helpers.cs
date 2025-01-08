@@ -564,19 +564,19 @@ namespace SKM.V3.Methods
                     {
                         var machineCodeSeed = ExecCommand("cmd.exe", "/c powershell.exe -Command \"(Get-CimInstance -Class Win32_ComputerSystemProduct).UUID\"", out error, v);
 
-                        if(string.IsNullOrEmpty(machineCodeSeed) || !string.IsNullOrEmpty( error))
-                        {
-                            return null;
-                            //throw new Exception("Machine Code could not be computed. Error message: " + error);
-                        }
+                        //if(string.IsNullOrEmpty(machineCodeSeed) || !string.IsNullOrEmpty( error))
+                        //{
+                        //    return null;
+                        //    //throw new Exception("Machine Code could not be computed. Error message: " + error);
+                        //}
 
-                        if (string.IsNullOrEmpty(machineCodeSeed))
+                        if (string.IsNullOrEmpty(machineCodeSeed) || !string.IsNullOrEmpty(error))
                         {
                             // Assuming Helpers.ReadRegistryValue is a method to read registry values
                             string machineGUID = ReadRegistryValue(
-          "HKEY_LOCAL_MACHINE", // Hive as string
-          @"SOFTWARE\Microsoft\Cryptography",
-          "MachineGuid");
+                              "HKEY_LOCAL_MACHINE", // Hive as string
+                              @"SOFTWARE\Microsoft\Cryptography",
+                              "MachineGuid");
 
                             if (!string.IsNullOrEmpty(machineGUID))
                             {
@@ -631,16 +631,7 @@ namespace SKM.V3.Methods
             }
         }
 
-        //private static string ReadRegistryValue(Microsoft.Win32.RegistryHive hive, string subKey, string valueName)
-        //{
-        //    using (var baseKey = Microsoft.Win32.RegistryKey.OpenBaseKey(hive, Microsoft.Win32.RegistryView.Registry64))
-        //    using (var key = baseKey.OpenSubKey(subKey))
-        //    {
-        //        return key?.GetValue(valueName)?.ToString();
-        //    }
-        //}
-
-        public static string ReadRegistryValue(string hive, string subKey, string valueName)
+        private static string ReadRegistryValue(string hive, string subKey, string valueName)
         {
             Microsoft.Win32.RegistryKey baseKey = null;
 
@@ -677,8 +668,7 @@ namespace SKM.V3.Methods
             catch (Exception ex)
             {
                 // Log or handle exceptions as needed
-                Console.WriteLine($"Error reading registry value: {ex.Message}");
-                return null;
+                throw new Exception("Machine Code could not be computed. Error message: " + ex.Message);
             }
         }
         private static string linuxMachineCodeHelper()
