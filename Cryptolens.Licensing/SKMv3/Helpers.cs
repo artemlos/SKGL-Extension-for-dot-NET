@@ -570,6 +570,22 @@ namespace SKM.V3.Methods
                             //throw new Exception("Machine Code could not be computed. Error message: " + error);
                         }
 
+                        if (string.IsNullOrEmpty(machineCodeSeed))
+                        {
+                            // Assuming Helpers.ReadRegistryValue is a method to read registry values
+                            string machineGUID = ReadRegistryValue(
+          "HKEY_LOCAL_MACHINE", // Hive as string
+          @"SOFTWARE\Microsoft\Cryptography",
+          "MachineGuid");
+
+                            if (!string.IsNullOrEmpty(machineGUID))
+                            {
+                                return SKGL.SKM.getSHA256(machineCodeSeed, v);
+                            }
+                            return null;
+                        }
+
+
                         return SKGL.SKM.getSHA256(machineCodeSeed, v);
                     }
                     else if (v==10)
@@ -615,6 +631,56 @@ namespace SKM.V3.Methods
             }
         }
 
+        //private static string ReadRegistryValue(Microsoft.Win32.RegistryHive hive, string subKey, string valueName)
+        //{
+        //    using (var baseKey = Microsoft.Win32.RegistryKey.OpenBaseKey(hive, Microsoft.Win32.RegistryView.Registry64))
+        //    using (var key = baseKey.OpenSubKey(subKey))
+        //    {
+        //        return key?.GetValue(valueName)?.ToString();
+        //    }
+        //}
+
+        public static string ReadRegistryValue(string hive, string subKey, string valueName)
+        {
+            Microsoft.Win32.RegistryKey baseKey = null;
+
+            try
+            {
+                // Determine the registry hive to open
+                switch (hive.ToUpperInvariant())
+                {
+                    case "HKEY_LOCAL_MACHINE":
+                        baseKey = Microsoft.Win32.Registry.LocalMachine;
+                        break;
+                    case "HKEY_CURRENT_USER":
+                        baseKey = Microsoft.Win32.Registry.CurrentUser;
+                        break;
+                    case "HKEY_CLASSES_ROOT":
+                        baseKey = Microsoft.Win32.Registry.ClassesRoot;
+                        break;
+                    case "HKEY_USERS":
+                        baseKey = Microsoft.Win32.Registry.Users;
+                        break;
+                    case "HKEY_CURRENT_CONFIG":
+                        baseKey = Microsoft.Win32.Registry.CurrentConfig;
+                        break;
+                    default:
+                        throw new ArgumentException("Unsupported registry hive: " + hive);
+                }
+
+                // Open the registry key and read the value
+                using (var key = baseKey.OpenSubKey(subKey))
+                {
+                    return key?.GetValue(valueName)?.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log or handle exceptions as needed
+                Console.WriteLine($"Error reading registry value: {ex.Message}");
+                return null;
+            }
+        }
         private static string linuxMachineCodeHelper()
         {
             bool isRPI = false;
