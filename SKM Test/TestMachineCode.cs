@@ -33,5 +33,12 @@ namespace SKM_Test
         {
             var test = Helpers.GetHardiskId();
         }
+
+        [TestMethod]
+        public void MyTestMethod2()
+        {
+            var a = Helpers.GetMachineCodePI(v: 2);
+
+        }
     }
 }
