@@ -577,11 +577,7 @@ namespace SKM.V3.Methods
                                 return SKGL.SKM.getSHA256(machineGUID, v);
                             }
 
-                            if (string.IsNullOrEmpty(machineCodeSeed) || !string.IsNullOrEmpty(error))
-                            {
-                                return null;
-                                //throw new Exception("Machine Code could not be computed. Error message: " + error);
-                            }
+                            return null;
                         }
 
 
