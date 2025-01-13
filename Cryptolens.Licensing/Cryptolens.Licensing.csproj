@@ -6,9 +6,9 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Company>Cryptolens AB</Company>
     <Authors>Cryptolens AB</Authors>
-    <Version>4.0.48</Version>
-    <AssemblyVersion>4.0.48.1</AssemblyVersion>
-    <FileVersion>4.0.48.1</FileVersion>
+    <Version>4.0.49</Version>
+    <AssemblyVersion>4.0.49.1</AssemblyVersion>
+    <FileVersion>4.0.49.1</FileVersion>
     <Description>An API documentation can be found at https://help.cryptolens.io/api/dotnet/.
 
 This is a client API that serves as an interface to Cryptolens Web API (app.cryptolens.io/docs/api/).
@@ -50,6 +50,11 @@ NB: There is also one for C++ (https://github.com/Cryptolens/cryptolens-cpp)</De
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' and $(DefineConstants.Contains('SYSTEM_MANAGEMENT'))">
     <PackageReference Include="System.Management" Version="4.5.0" />
   </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
+  </ItemGroup>
+
 
 
   <ItemGroup Condition="('$(TargetFramework)' == 'net40' or '$(TargetFramework)' == 'net46' or '$(TargetFramework)' == 'net35' or '$(TargetFramework)' == 'net47' or '$(TargetFramework)' == 'net471' or '$(TargetFramework)' == 'net48' or '$(TargetFramework)' == 'net45') and $(DefineConstants.Contains('SYSTEM_MANAGEMENT'))">
