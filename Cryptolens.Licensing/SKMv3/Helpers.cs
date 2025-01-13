@@ -677,7 +677,8 @@ namespace SKM.V3.Methods
             catch (Exception ex)
             {
                 // Log or handle exceptions as needed
-                throw new Exception("Machine Code could not be computed. Error message: " + ex.Message);
+                return null;
+                //throw new Exception("Machine Code could not be computed. Error message: " + ex.Message);
             }
         }
         private static string linuxMachineCodeHelper()
